@@ -20,7 +20,7 @@
 #include "stdafx.h"
 #include "NotepadListener.h"
 
-class LineNumEditElement : public DirectUI::Element
+class CLineNumEditElement : public DirectUI::Element
 {
 public:
     // ClassInfo accessors (static and virtual instance-based)

@@ -52,7 +52,7 @@
 
 #define GS_ADAPTOR          0x00004000      // Requires extra notifications to host
 
-DirectUI::IClassInfo* LineNumEditElement::Class = NULL;
+DirectUI::IClassInfo* CLineNumEditElement::Class = NULL;
 typedef struct GMSG_SYNCADAPTOR {
     GMSG baseMsg;
     UINT garbage1;
@@ -95,23 +95,23 @@ const UINT win32MouseMap[7][3] =
     {  WM_MOUSEWHEEL,       WM_MOUSEWHEEL,      WM_MOUSEWHEEL   },  // GMOUSE_WHEEL
 };
 
-HRESULT LineNumEditElement::Register()
+HRESULT CLineNumEditElement::Register()
 {
-    return DirectUI::ClassInfo<LineNumEditElement, DirectUI::Element>::Register(GetModuleHandleW(NULL));
+    return DirectUI::ClassInfo<CLineNumEditElement, DirectUI::Element>::Register(GetModuleHandleW(NULL));
 }
 
-bool LineNumEditElement::GetKeyFocused()
+bool CLineNumEditElement::GetKeyFocused()
 {
     return true;
 }
 
-void LineNumEditElement::SetKeyFocus()
+void CLineNumEditElement::SetKeyFocus()
 {
     SetFocus(_hWndSink);
     SetFocus(_hWndCtrl);
 }
 
-UCString LineNumEditElement::GetContentStringAsDisplayed(Value** val)
+UCString CLineNumEditElement::GetContentStringAsDisplayed(Value** val)
 {
     if (_hWndCtrl)
     {
@@ -123,7 +123,7 @@ UCString LineNumEditElement::GetContentStringAsDisplayed(Value** val)
     return Element::GetContentStringAsDisplayed(val);
 }
 
-UINT LineNumEditElement::MessageCallback(GMSG* pMsg)
+UINT CLineNumEditElement::MessageCallback(GMSG* pMsg)
 {
     if (pMsg->hgadMsg == GetDisplayNode())
     {
@@ -151,12 +151,12 @@ UINT LineNumEditElement::MessageCallback(GMSG* pMsg)
     return DU_S_NOTHANDLED;
 }
 
-void LineNumEditElement::OnInput(InputEvent* event)
+void CLineNumEditElement::OnInput(InputEvent* event)
 {
 
 }
 
-void LineNumEditElement::OnHosted(DirectUI::Element* pNewHost)
+void CLineNumEditElement::OnHosted(DirectUI::Element* pNewHost)
 {
     // TODO: Make sure new host is HWND, otherwise this won't work
     HWND hwndRoot = ((HWNDElement*)pNewHost)->GetHWND();
@@ -218,7 +218,7 @@ void LineNumEditElement::OnHosted(DirectUI::Element* pNewHost)
     }
 }
 
-void LineNumEditElement::OnPropertyChanged(const DirectUI::PropertyInfo* pPi, int index, Value* pOld, Value* pNew)
+void CLineNumEditElement::OnPropertyChanged(const DirectUI::PropertyInfo* pPi, int index, Value* pOld, Value* pNew)
 {
     // Call base
     Element::OnPropertyChanged(pPi, index, pOld, pNew);
@@ -253,16 +253,16 @@ void LineNumEditElement::OnPropertyChanged(const DirectUI::PropertyInfo* pPi, in
     }
 }
 
-HRESULT LineNumEditElement::CreateInstance(DirectUI::Element* rootElement, unsigned long* debugVariable, DirectUI::Element** newElement)
+HRESULT CLineNumEditElement::CreateInstance(DirectUI::Element* rootElement, unsigned long* debugVariable, DirectUI::Element** newElement)
 {
     int hr = E_OUTOFMEMORY;
 
     // Using HeapAlloc instead of new() is required as DirectUI::Element::DisplayNodeCallback calls HeapFree() with the element
-    LineNumEditElement* instance = (LineNumEditElement*)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(LineNumEditElement));
+    CLineNumEditElement* instance = (CLineNumEditElement*)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(CLineNumEditElement));
 
     if (instance != NULL)
     {
-        new (instance) LineNumEditElement();
+        new (instance) CLineNumEditElement();
         hr = instance->Initialize(0, rootElement, debugVariable);
         if (SUCCEEDED(hr))
         {
@@ -281,7 +281,7 @@ HRESULT LineNumEditElement::CreateInstance(DirectUI::Element* rootElement, unsig
     return hr;
 }
 
-HWND LineNumEditElement::CreateHWND(HWND hwndParent)
+HWND CLineNumEditElement::CreateHWND(HWND hwndParent)
 {
     // TODO: Custom scrollbars
     int dwStyle = WS_CHILD | WS_VISIBLE | WS_HSCROLL | ES_MULTILINE | WS_VSCROLL;
@@ -289,7 +289,7 @@ HWND LineNumEditElement::CreateHWND(HWND hwndParent)
     return hwndEdit;
 }
 
-void LineNumEditElement::SyncRect(UINT nChangeFlags, bool bForceSync, Value* pNewSize, Value* pNewPoint)
+void CLineNumEditElement::SyncRect(UINT nChangeFlags, bool bForceSync, Value* pNewSize, Value* pNewPoint)
 {
     // Get size of gadget in container coordinates
     RECT rcConPxl; 
@@ -354,7 +354,7 @@ void LineNumEditElement::SyncRect(UINT nChangeFlags, bool bForceSync, Value* pNe
 
 }
 
-void LineNumEditElement::SyncFont()
+void CLineNumEditElement::SyncFont()
 {
     // TODO: implement font shit
     Value* pvFFace;
@@ -396,7 +396,7 @@ void LineNumEditElement::SyncFont()
     SendMessageW(_hWndCtrl, WM_SETFONT, (WPARAM)_hFont, TRUE);
 }
 
-void LineNumEditElement::SyncVisible()
+void CLineNumEditElement::SyncVisible()
 {
     if (!IsDestroyed())
     {
@@ -406,7 +406,7 @@ void LineNumEditElement::SyncVisible()
     }
 }
 
-void LineNumEditElement::SyncText()
+void CLineNumEditElement::SyncText()
 {
     if (!IsDestroyed())
     {
@@ -435,9 +435,9 @@ void LineNumEditElement::SyncText()
     }
 }
 
-LRESULT LineNumEditElement::sinkSubclassProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData)
+LRESULT CLineNumEditElement::sinkSubclassProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData)
 {
-    LineNumEditElement* phh = (LineNumEditElement*)dwRefData;
+    CLineNumEditElement* phh = (CLineNumEditElement*)dwRefData;
 
     switch (uMsg)
     {
@@ -449,10 +449,14 @@ LRESULT LineNumEditElement::sinkSubclassProc(HWND hWnd, UINT uMsg, WPARAM wParam
     case WM_CTLLNESTATICCOLOR:
     {
         HDC hdc = (HDC)wParam;
-        SetDCBrushColor(hdc, RGB(16, 18, 20));
-        SetBkColor(hdc, RGB(16, 18, 20));
-        SetTextColor(hdc, RGB(45, 45, 45));
-        SetDCPenColor(hdc, RGB(45, 45, 45));
+        //SetDCBrushColor(hdc, RGB(16, 18, 20));
+        //SetBkColor(hdc, RGB(16, 18, 20));
+        //SetTextColor(hdc, RGB(45, 45, 45));
+        //SetDCPenColor(hdc, RGB(45, 45, 45));
+        SetDCBrushColor(hdc, RGB(240, 240, 240));
+        SetBkColor(hdc, RGB(240, 240, 240));
+        SetTextColor(hdc, RGB(108, 108, 108));
+        SetDCPenColor(hdc, RGB(108, 108, 108));
         return (LRESULT)GetStockObject(DC_BRUSH);
     }
     case WM_COMMAND:
@@ -515,9 +519,9 @@ LRESULT LineNumEditElement::sinkSubclassProc(HWND hWnd, UINT uMsg, WPARAM wParam
     return DefSubclassProc(hWnd, uMsg, wParam, lParam);
 }
 
-LRESULT LineNumEditElement::ctrlSubclassProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData)
+LRESULT CLineNumEditElement::ctrlSubclassProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData)
 {
-    LineNumEditElement* phh = (LineNumEditElement*)dwRefData;
+    CLineNumEditElement* phh = (CLineNumEditElement*)dwRefData;
     LRESULT result;
     BOOL(*ForwardGadgetMessage)(HGADGET hgadRoot, UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT * pr) = (BOOL(*)(HGADGET, UINT, WPARAM, LPARAM, LRESULT*))GetProcAddress(GetModuleHandleW(L"duser.dll"), "ForwardGadgetMessage");
 

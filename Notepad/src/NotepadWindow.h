@@ -24,10 +24,10 @@ namespace UI {
 namespace DuiKit {
 namespace Notepad
 {
-	class NotepadWindow
+	class CNotepadWindow
 	{
 	public:
-		static bool Create(NotepadWindow** pNotepadWindow, HINSTANCE moduleInstance);
+		static bool Create(CNotepadWindow** pNotepadWindow, HINSTANCE moduleInstance);
 		
 		void AddListener(DirectUI::IElementListener* listener);
 		void SetMenu(HMENU menu);
@@ -40,7 +40,7 @@ namespace Notepad
 
 		void Refresh(bool showError);
 	private:
-		NotepadWindow();
+		CNotepadWindow();
 
 		bool ctrlPressed = false;
 		HINSTANCE _modInstance;

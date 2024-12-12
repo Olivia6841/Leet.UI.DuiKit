@@ -48,18 +48,18 @@ int WINAPI wWinMain(
         exit(hRes);
 
     // Register DUI control set
-    DirectUI::RegisterAllControls();
+    RegisterAllControls();
 
     // Register LineNumEdit win32 control
     LineNumEdit::SuperclassWindow();
-    LineNumEditElement::Register();
+    CLineNumEditElement::Register();
 
     // Create the main menu
-    NotepadWindow* mainWindow;
-    bool shit = NotepadWindow::Create(&mainWindow, hInstance);
+    CNotepadWindow* mainWindow;
+    bool shit = CNotepadWindow::Create(&mainWindow, hInstance);
 
     // Create a listener
-    NotepadListener* listener = new NotepadListener(mainWindow);
+    CNotepadListener* listener = new CNotepadListener(mainWindow);
 
     // Create the menu
     HMENU menu = LoadMenuW(hInstance, MAKEINTRESOURCEW(IDR_MENU1));

@@ -25,9 +25,9 @@
 using namespace Leet::UI::DuiKit::Notepad;
 using namespace DirectUI;
 
-bool NotepadWindow::Create(NotepadWindow** pNotepadWindow, HINSTANCE moduleInstance)
+bool CNotepadWindow::Create(CNotepadWindow** pNotepadWindow, HINSTANCE moduleInstance)
 {
-    NotepadWindow* pNpWindow = new NotepadWindow();
+    CNotepadWindow* pNpWindow = new CNotepadWindow();
     Element* pWindowElement = nullptr;
     DUIXmlParser* pParser = nullptr;
     HRESULT hRes = 0;
@@ -94,12 +94,12 @@ bool NotepadWindow::Create(NotepadWindow** pNotepadWindow, HINSTANCE moduleInsta
     return true;
 }
 
-void NotepadWindow::AddListener(IElementListener* listener)
+void CNotepadWindow::AddListener(IElementListener* listener)
 {
     _pWindowElement->AddListener(listener);
 }
 
-void Leet::UI::DuiKit::Notepad::NotepadWindow::SetMenu(HMENU menu)
+void Leet::UI::DuiKit::Notepad::CNotepadWindow::SetMenu(HMENU menu)
 {
     ::SetMenu(GetWindowHandle(), menu);
 }
@@ -142,7 +142,7 @@ INT_PTR AboutDialogProcedure(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     return FALSE;
 }
 
-bool Leet::UI::DuiKit::Notepad::NotepadWindow::HandleMenuMessage(HWND hWnd, int message, WPARAM wParam, LPARAM lParam)
+bool Leet::UI::DuiKit::Notepad::CNotepadWindow::HandleMenuMessage(HWND hWnd, int message, WPARAM wParam, LPARAM lParam)
 {
     if (hWnd == GetWindowHandle() && message == WM_COMMAND)
     {
@@ -366,12 +366,12 @@ bool Leet::UI::DuiKit::Notepad::NotepadWindow::HandleMenuMessage(HWND hWnd, int 
     return false;
 }
 
-HWND NotepadWindow::GetWindowHandle()
+HWND CNotepadWindow::GetWindowHandle()
 {
     return _pNativeWindowHost->GetHWND();
 }
 
-void NotepadWindow::OnInput(Element* elem, InputEvent* pie)
+void CNotepadWindow::OnInput(Element* elem, InputEvent* pie)
 {
     if (pie->flag == GMF_DIRECT || pie->flag == GMF_BUBBLED)
     {
@@ -423,7 +423,7 @@ void NotepadWindow::OnInput(Element* elem, InputEvent* pie)
     }
 }
 
-void NotepadWindow::OnEvent(Element* elem, Event* pEvent)
+void CNotepadWindow::OnEvent(Element* elem, Event* pEvent)
 {
     if (pEvent->type == DirectUI::Button::Click)
     {
@@ -453,7 +453,7 @@ void NotepadWindow::OnEvent(Element* elem, Event* pEvent)
 }
 
 
-void NotepadWindow::Refresh(bool showError)
+void CNotepadWindow::Refresh(bool showError)
 {
     unsigned long defer;
     _pWindowElement->StartDefer(&defer);
@@ -464,7 +464,7 @@ void NotepadWindow::Refresh(bool showError)
     Value* pv = nullptr;
 
     // Parse text from Edit control
-    LPCWSTR pTextW = reinterpret_cast<LPCWSTR>(((LineNumEditElement*)_pEdit)->GetContentStringAsDisplayed(&pv));
+    LPCWSTR pTextW = reinterpret_cast<LPCWSTR>(((CLineNumEditElement*)_pEdit)->GetContentStringAsDisplayed(&pv));
 
     // Convert to single byte for parser
     if (lstrlenW(pTextW) > 0)
@@ -528,7 +528,7 @@ void NotepadWindow::Refresh(bool showError)
 }
 
 
-NotepadWindow::NotepadWindow() 
+CNotepadWindow::CNotepadWindow() 
 {
     
 }

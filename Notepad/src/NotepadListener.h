@@ -39,12 +39,12 @@ namespace Notepad
         WORD wFlags;
     };
 
-    class NotepadListener : public IElementListener
+    class CNotepadListener : public IElementListener
     {
     private:
-        NotepadWindow* _pWindow;
+        CNotepadWindow* _pWindow;
     public:
-        NotepadListener(NotepadWindow* window) 
+        CNotepadListener(CNotepadWindow* window) 
         {
             _pWindow = window;
             _pWindow->AddListener(this);
